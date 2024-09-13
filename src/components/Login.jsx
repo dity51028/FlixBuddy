@@ -2,11 +2,18 @@ import React, { useRef, useState } from 'react'
 import Header from './Header'
 import bg from '../assets/background.jpg'
 import { validateData } from '../utils/validate.js'
+import {  createUserWithEmailAndPassword } from "firebase/auth";
+import { signInWithEmailAndPassword } from 'firebase/auth';
+import {auth} from '../utils/firebase.js'
+import { useNavigate } from 'react-router-dom';
+
 
 const Login = () => {
 
     const [signIn,setSignIn] = useState(true);
     const [errorMsg,setErrorMsg] = useState(null)
+
+    const navigate = useNavigate()
 
     const email = useRef(null);
     const password = useRef(null);
@@ -18,6 +25,44 @@ const Login = () => {
        //console.log(password.current.value);
        //console.log((message));
        setErrorMsg(message);
+
+       if(message) return ;
+
+       if(!signIn){
+        createUserWithEmailAndPassword(auth, email.current.value,password.current.value)
+       .then((userCredential) => {
+    // Signed up 
+        const user = userCredential.user;
+        console.log(user);
+        navigate('/browse')
+    // ...
+      })
+     .catch((error) => {
+      const errorCode = error.code;
+      const errorMessage = error.message;
+    
+      setErrorMsg(errorCode+' '+errorMessage)
+     });
+
+       }else{
+        signInWithEmailAndPassword(auth, email.current.value,password.current.value)
+        .then((userCredential) => {
+        // Signed in 
+         const user = userCredential.user;
+         console.log(user);
+         navigate('/browse')
+        // ...
+        })
+       .catch((error) => {
+       const errorCode = error.code;
+       const errorMessage = error.message;
+       setErrorMsg(errorCode + " "+errorMessage)
+       });
+       
+
+       }
+
+
 
     }
 

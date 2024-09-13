@@ -12,4 +12,15 @@ Currently, two official plugins are available:
 - create react app
 - tailwind setup
 
+# login & signup
+- user input
+- form validation
+- firebase setup
+- deploy on firebase
+- authentication with email & password
+- useNavigate
+- sign out implemented
+
+
+
 
